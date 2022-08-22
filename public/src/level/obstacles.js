@@ -4,9 +4,9 @@ function makeObstacles(sim) {
 		obstacles.push(
 			new Block(sim.world, {
 				x: random(450, i/4 * sim.distance),
-				y: sim.window.y - random(-100, 30),
-				w: random(70, 100),
-				h: random(70, 100),
+				y: sim.window.y - random(-50, 25),
+				w: random(80, 140),
+				h: random(80, 140),
 				color: '#222'
 			},
 			{

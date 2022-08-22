@@ -3,7 +3,9 @@ class Simulation {
 	constructor({
 		mutationRate,
 		distance,
-		roundTime
+		roundTime,
+		firstPopulation,
+		population
 	}) {
 		this.window = {
 			x: window.innerWidth,
@@ -15,8 +17,8 @@ class Simulation {
 		this.mutationRate = mutationRate || 1.5;
 		this.distance = distance || 1000;
 		this.roundTime = roundTime || 2500;
-		this.firstGenPop = 32;
-		this.genPop = 16;
+		this.firstGenPop = firstPopulation || 128;
+		this.genPop = population || 48;
 
 		this._timer = 0;
 		this.offset = 0;
