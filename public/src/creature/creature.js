@@ -1,5 +1,7 @@
 class Creature {
-	constructor(world,x = 0, y = 0, n = 2, config = undefined, others = undefined) {
+	constructor(simulation, x = 0, y = 0, n = 2, config = undefined, others = undefined) {
+	
+		this.simulation = simulation;
 		this.masses = [];
 		this.pos = createVector(x,y);
 
@@ -30,7 +32,7 @@ class Creature {
 		this.config = {links, beats, lastname, n: beats.length};
 		for (let i = 0; i < beats.length; i++) {
 			this.masses.push(
-				new Ball(world, {
+				new Ball(this.simulation.world, {
 					x: random(this.pos.x - this.rad, this.pos.x + this.rad),
 					y: random(this.pos.y - this.rad, this.pos.y + this.rad),
 					r: 8,
@@ -95,16 +97,28 @@ class Creature {
 	destructor() {
 		this.masses.forEach(m => {
 			m.constraints.forEach(c => {
-				Matter.World.remove(world, c);
+				Matter.World.remove(this.simulation.world, c);
 			});
-			Matter.World.remove(world, m.body)
+			Matter.World.remove(this.simulation.world, m.body)
 		});
 	}
-	static mutateConfig(conf) {
 
-		const config = { ...conf };
-		config.beats = [...conf.beats];
-		config.links = [...conf.links];
+	static getAvailableMutationName(baseStats, lastname, index) {
+		let mutationCode = ` ${String.fromCharCode(index)}`;
+
+		while (baseStats[lastname + mutationCode] !== undefined) {
+			mutationCode = ` ${String.fromCharCode(index)}`
+			index++;
+		}
+
+		return mutationCode;
+	}
+
+	static mutateConfig(simulation, _config) {
+
+		const config = { ..._config };
+		config.beats = [..._config.beats];
+		config.links = [..._config.links];
 		config.beats.map((b) => {
 			let r = {...b};
 			r.rate = b.rate + (b.rate/100) * (round(random(0, 1)) == 0 ? -1 : 1)
@@ -115,8 +129,8 @@ class Creature {
 			return r;
 		})
 
-		let massMutation = random(0, 100) < mutationRate;
-		let springMutation = random(0, 100) < mutationRate*2;
+		let massMutation = random(0, 100) < simulation.mutationRate;
+		let springMutation = random(0, 100) < simulation.mutationRate*2;
 		if (massMutation) {
 			config.beats.push({
 				rate: random(4, 64),
@@ -147,16 +161,15 @@ class Creature {
 			config.n++;
 
 
-			let i = 0;
-			let mutationCode = ` ${String.fromCharCode(65 + i)}`;
-			while (baseStats[config.lastname + mutationCode] !== undefined) {
-				mutationCode = ` ${String.fromCharCode(65 + i)}`
-				i++;
-			} 
-			config.lastname += mutationCode; 
+			config.lastname += Creature.getAvailableMutationName(
+				simulation.baseStats,
+				config.lastname,
+				97
+			);
+		
+			simulation.graph.insert(config.lastname, 1);
+			simulation.baseStats[config.lastname] = 0;
 
-			graph.insert(config.lastname, 1);
-			baseStats[config.lastname] = 0;
 		} else if (springMutation) {
 			for (let j = 0; j < floor(random(1, config.n)); j++) {
 				let ranA = floor(random(0, config.n));
@@ -175,16 +188,15 @@ class Creature {
 					}
 				})
 			}
-			let i = 0;
-			let mutationCode = ` ${String.fromCharCode(97 + i)}`;
-			while (baseStats[config.lastname + mutationCode] !== undefined) {
-				mutationCode = ` ${String.fromCharCode(97 + i)}`
-				i++;
-			} 
-			config.lastname += mutationCode; 
+				
+			config.lastname += Creature.getAvailableMutationName(
+				simulation.baseStats,
+				config.lastname,
+				97
+			);
 
-			graph.insert(config.lastname, 1);
-			baseStats[config.lastname] = 0;
+			simulation.graph.insert(config.lastname, 1);
+			simulation.baseStats[config.lastname] = 0;
 		}
 
 		return config;

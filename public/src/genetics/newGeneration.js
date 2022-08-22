@@ -1,37 +1,52 @@
-function uploadGraph() {
-	fetch('http://127.0.0.1:3000/upload', {
-		method: 'post',
-		body: JSON.stringify({
-			graph:graph.toData(),
-			meta: {
-				currentGen,
-				currentIndex
-			}
-		}),
+
+Simulation.http = function({
+	ip,
+	port,
+	path,
+	method,
+	body
+}) {
+	fetch(`http://${ip}:${port}/${path}`, {
+		method,
+		body: body === undefined ? undefined : JSON.stringify(body),
 		headers: {
 			'Accept': 'application/json',
 			'Content-Type': 'application/json'
 		}
-	}) 
+	});
 }
 
-function newGeneration(n, bestConfigs) {
+Simulation.prototype.uploadGraph = function() {
+	Simulation.http({
+		ip: '127.0.0.1',
+		port: '3000',
+		method: 'post',
+		path: 'upload',
+		body: {
+			graph: this.graph.toData(),
+			meta: {
+				currentGen: this.currentGen,
+				currentIndex: this.currentIndex
+			}
+		}
+	});
+}
+
+Simulation.prototype.newGeneration = function() {
 	
-	let stats = {...baseStats};
-    let creatureConfigs = [];
+	let stats = {...this.baseStats};
 
-    console.log(bestConfigs)
-    if (bestConfigs[0] === undefined) {
-        console.log('No creatures survived in the simulation');
-        endMessage();
-        noLoop();
-    }
+	let bestConfigs = this.getBestCreatures();
+	this.creatureConfigs = [];
 
-	for (let i = 0; i < n; i++) {
-		let oldConfig = bestConfigs[floor(random(0, bestConfigs.length))];
-		let config = Creature.mutateConfig(oldConfig);
-		creatureConfigs.push(config);
+    if (bestConfigs.length === 0) return true;
 
+	for (let i = 0; i < this.genPop; i++) {
+
+		let oldConfig = bestConfigs[floor(random(0, bestConfigs.length-0.1))];
+		let config = Creature.mutateConfig(this, oldConfig);
+
+		this.creatureConfigs.push(config);
 
 		if (stats[config.lastname] === undefined) 
 			stats[config.lastname] = 1;
@@ -40,13 +55,14 @@ function newGeneration(n, bestConfigs) {
 	}
 
     // Align screen
-    offset -= 75;
-    distance += 75;
-    graph.pos.x += 75;
+	if (this.distance > this.window.x - 150) {
+		this.offset -= 75;
+	}
+	this.distance += 75;
 
-    graph.update(stats);
+    this.graph.update(stats);
 
-    uploadGraph();
+    this.uploadGraph();
 
-	return {creatureConfigs, stats};
+	return false;
 }

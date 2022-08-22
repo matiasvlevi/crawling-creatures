@@ -2,50 +2,45 @@ let currentGen = 0;
 let currentCreature = 0;
 let currentIndex = 0;
 
-function nextCreature() {
+Simulation.prototype.nextCreature = function() {
     // is creature passing?
-	if (distance < currentCreature.getPos()) {
-		bestScore = currentCreature.getPos();
-		bestIndex = currentIndex;
-		bests.push(bestIndex);
+	if (this.distance < this.creature.getPos()) {
+		this.bests.push(this.currentIndex);
 
         // Creature Qualified message
-        console.log(`No:${bestIndex} Qualified !!!`);
-		console.log(currentCreature);
+        console.log(`${this.creature.config.lastname} Qualified !!!`);
+		console.log(this.creature);
 	}
-	currentIndex++;
+	this.currentIndex++;
 
     // is new generation?
-    console.log('endGenCond ', currentIndex, creatureConfigs.length)
-	if (currentIndex >= creatureConfigs.length) {
+	if (this.currentIndex >= this.creatureConfigs.length) {
         
-		let generation = newGeneration(genPop, bestOf(creatureConfigs));
-        creatureConfigs = generation.creatureConfigs;
-
+		if (this.newGeneration()) {
+			this.running = false;
+			return;
+		}
 
         // Increment generation
-        currentGen++;
-        currentIndex = 0;
+        this.currentGen++;
+        this.currentIndex = 0;
 
-        // reset generation
-        //bestIndex = 0;
-        //bestScore = 0;
-        bests = [];
+        this.bests = [];
 
-        console.log(`Generation ${currentGen}`);
+        console.log(`Generation ${this.currentGen}`);
 	}
 
     // Remove Creature's matter.js bodies
-	currentCreature.destructor();
+	this.creature.destructor();
 
 	// Initialize new Creature
-    currentCreature = new Creature(
-        world,
-        260+offset,
-        wny-260,
+    this.creature = new Creature(
+        this,
+        this.offset + 260,
+        this.window.y - 260,
         5,
-        creatureConfigs[currentIndex],
-        creatureConfigs
+        this.creatureConfigs[this.currentIndex], // CLEAN THIS CONSTRUCTOR
+        this.creatureConfigs
     );
 
     return true;

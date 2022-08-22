@@ -1,10 +1,10 @@
-function makeGround(matter_world) {
+function makeGround(sim) {
 	let ground = new Block(
-		matter_world,
+		sim.world,
 		{
-			x: wnx,
-			y: wny+190,
-			w: wnx*10,
+			x: sim.window.x,
+			y: sim.window.y + 190,
+			w: sim.window.x * 10,
 			h: 500,
 			color: '#222'
 		},

@@ -1,9 +1,11 @@
-function makeRandomGeneration(n) {
-	let creatureConfigs = [];
+
+Simulation.prototype.makeRandomGeneration = function() {
+	this.creatureConfigs = [];
 	let defaultStats = {};
-	for (let i = 0; i < n; i++) {
-		let config = Creature.genConfig(random(3, 6), creatureConfigs);
-		creatureConfigs.push(config);
+
+	for (let i = 0; i < this.firstGenPop; i++) {
+		let config = Creature.genConfig(random(3, 6), this.creatureConfigs);
+		this.creatureConfigs.push(config);
 
 		if (defaultStats[config.lastname] === undefined)
 			defaultStats[config.lastname] = 0;
@@ -13,9 +15,9 @@ function makeRandomGeneration(n) {
 
     // Graph statistics
 	let stats = {...defaultStats};
-	for (let i = 0; i < n; i++) {
-		stats[creatureConfigs[i].lastname]++;
+	for (let i = 0; i < this.firstGenPop; i++) {
+		stats[this.creatureConfigs[i].lastname]++;
 	}
 
-	return {creatureConfigs, stats, defaultStats};
+	return  { stats, defaultStats };
 }

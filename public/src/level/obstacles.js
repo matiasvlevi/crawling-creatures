@@ -1,12 +1,12 @@
-function makeObstacles(matter_world) {
+function makeObstacles(sim) {
     let obstacles = [];
 	for (let i = 0; i < 64; i++) {
 		obstacles.push(
-			new Block(matter_world, {
-				x: random(450, i/4 * distance),
-				y: wny - random(-10, 40),
-				w: random(80, 140),
-				h: random(80, 140),
+			new Block(sim.world, {
+				x: random(450, i/4 * sim.distance),
+				y: sim.window.y - random(-100, 30),
+				w: random(70, 100),
+				h: random(70, 100),
 				color: '#222'
 			},
 			{
