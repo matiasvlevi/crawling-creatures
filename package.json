@@ -1,16 +1,19 @@
 {
-  "name": "springs",
+  "name": "genetic-creatures",
   "version": "1.0.0",
-  "description": "",
+  "description": "Evolve crawling creatures",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+	  "start":"node index.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+	"evolution",
+	"genetic",
+	"creature"
+  ],
+  "author": "Matias Vazquez-Levi",
+  "license": "MIT",
   "dependencies": {
-    "express": "^4.18.1",
-    "matter-js": "^0.18.0"
+    "express": "^4.18.1"
   }
 }
