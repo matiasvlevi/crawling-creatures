@@ -124,11 +124,11 @@ class Simulation {
 	events() {
 		if (keyIsPressed) {
 			if (keyCode === LEFT_ARROW) {
-				offset += 20
+				this.offset += 20
 			} else if (keyCode === RIGHT_ARROW) {
-				offset -= 20;
+				this.offset -= 20;
 			} else if (keyCode === DOWN_ARROW) {
-				offset = 0;
+				this.offset = 0;
 			}
 		}
 	}
