@@ -33,7 +33,7 @@ class Simulation {
 		this.engine = Matter.Engine.create();
 		this.engine.timing.timeScale = 1.2;
 		this.world = this.engine.world;
-		this.world.gravity.y = 8;
+		this.world.gravity.y = 5;
 
 		let generation = this.makeRandomGeneration();
 		
@@ -142,9 +142,10 @@ class Simulation {
 		if (this.running) this.creature.draw();
 		else this.endMessage();
 
-
-
 		pop();
+		
+		this.btnIncrementCycle.draw();
+		this.btnDecrementCycle.draw();
 
 		this.graph.draw();
 

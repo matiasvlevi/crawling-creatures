@@ -57,8 +57,6 @@ Simulation.prototype.scoreBoard = function() {
 	text(`Time Scale:  ${this.cycles}x`, 30 - this.offset, 200);
 	this.btnIncrementCycle.update();
 	this.btnDecrementCycle.update();
-	this.btnIncrementCycle.draw();
-	this.btnDecrementCycle.draw();
 
 	pop();
 }

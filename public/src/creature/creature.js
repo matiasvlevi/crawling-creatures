@@ -46,6 +46,7 @@ class Creature {
 			this.masses[i].body.friction = beats[i].friction;
 			this.masses[i].attributes.color = `#${color}${color}${color}`
 			this.masses[i].body.mass = beats[i].mass;
+			this.masses[i].body.slop = 0;
 
 		}	
 		for (let j = 0; j < links.length; j++) {
@@ -136,7 +137,7 @@ class Creature {
 				rate: random(4, 64),
 				current: 0,
 				initial: random(12, 160),
-				stiffness: random(0.05, 0.4),
+				stiffness: random(0.05, 0.1),
 				damping: random(0, 1.5),
 				friction: random(0, 1),
 				mass: random(10, 1500),
@@ -228,9 +229,14 @@ class Creature {
 
 	draw() {
 
+		push();
+
 		fill(255)
 		textSize(32);
+		noStroke();
 		text(`${this.name} ${this.config.lastname}`, this.masses[0].body.position.x, this.masses[0].body.position.y - 100);
+
+		pop();
 
 		this.masses.forEach(m => m.drawConstraints());
 		this.masses.forEach(m => m.draw());
