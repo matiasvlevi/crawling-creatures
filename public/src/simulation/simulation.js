@@ -139,10 +139,11 @@ class Simulation {
 		this.endLine();
 		this.scoreBoard();
 
-		if (this.running) this.creature.draw();
-		else this.endMessage();
+		if (this.running) this.creature.draw(); 
 
 		pop();
+
+		if (!this.running) this.endMessage();
 		
 		this.btnIncrementCycle.draw();
 		this.btnDecrementCycle.draw();

@@ -4,8 +4,8 @@ function setup() {
 		distance: 1000,
 		roundTime: 2200,
 		mutationRate: 1.5,
-		firstPopulation: 128,
-		population: 64
+		firstPopulation: 512,
+		population: 128
 	});	
 
 	createCanvas(

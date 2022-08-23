@@ -55,10 +55,10 @@ Simulation.prototype.newGeneration = function() {
 	}
 
     // Align screen
-	if (this.distance > this.window.x - 150) {
-		this.offset -= 75;
+	if (this.distance > this.window.x - 200) {
+		this.offset -= 25;
 	}
-	this.distance += 75;
+	this.distance += 25;
 
     this.graph.update(stats);
 
