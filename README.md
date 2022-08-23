@@ -2,8 +2,11 @@
 
 Evolve crawling creatures 
 
- <img align="center" width="500px" src="https://i.ibb.co/FXTKvzq/crawling-creatures.png">
+<p align="center">
+ <img width="750px" src="https://i.ibb.co/FXTKvzq/crawling-creatures.png">
+</p>
 
+<br/>
 
 ### Clone the repo
 
