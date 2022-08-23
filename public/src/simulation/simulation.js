@@ -40,8 +40,6 @@ class Simulation {
 		this.baseStats = generation.defaultStats;
 		this.graph = this.initGraph(generation);	
 
-
-
 		this.creature = new Creature(
 			this,
 			this.offset + 260,
@@ -50,8 +48,37 @@ class Simulation {
 			this.creatureConfigs[0], // CLEAN THIS CONSTRUCTOR
 			this.creatureConfigs
 		);
+
 		this.ground = makeGround(this);
 		this.obstacles = makeObstacles(this);
+
+		this.btnIncrementCycle = new Button({
+			x: 110,
+			y: 215,
+			w: 50,
+			h: 50,
+			text: '>',
+			event: () => {
+				if (this.cycles < 99)
+					this.cycles += 1;
+				else
+					this.cycles = 100;
+			}
+		});
+
+		this.btnDecrementCycle = new Button({
+			x: 30,
+			y: 215,
+			w: 50,
+			h: 50,
+			text: '<',
+			event: () => {
+				if (this.cycles > 1)
+					this.cycles -= 1;
+				else
+					this.cycles = 1;
+			}
+		});
 	}
 
 	initGraph(generation) {
