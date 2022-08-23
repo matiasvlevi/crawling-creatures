@@ -69,7 +69,7 @@ class Creature {
 				rate: random(4, 64),
 				current: 0,
 				initial: random(12, 160),
-				stiffness: random(0.05, 0.4),
+				stiffness: random(0.05, 0.1),
 				damping: random(0, 1.5),
 				friction: random(0, 1),
 				mass: random(10, 1500),
