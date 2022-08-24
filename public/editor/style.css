@@ -1,0 +1,107 @@
+.options {
+	display:flex;
+	flex-direction: column;
+	gap: 1rem;
+	min-width: 15.66vw;
+	max-width: 15.66vw;
+	min-height: 100vh;
+	position: absolute;
+	left: 83.33vw;
+	top: 0px;
+	z-index: 10;
+	padding-left: 1rem;
+
+
+	/* border: solid red 2px; */
+}
+			
+.entry {
+	padding: 0.4rem;
+	display:flex;
+	gap: 0.5rem;
+	justify-content: flex-end;
+	padding-right: 1.75rem;
+}
+
+.labeled-input {
+	display: flex;
+	gap: 0.5rem;
+	justify-content: flex-end;
+}
+
+p {
+	color: #fff;
+	margin: 0px;
+}
+
+#vertical {
+	flex-direction: column;
+}
+
+#horizontal {
+	flex-direction: row;
+}
+
+input, button, textarea {
+	background-color: #222;
+	color: #fff;
+	padding: 0.2rem;
+	border-radius: 4px;
+	border: none;
+}
+		
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button { 
+	opacity: 0.5;
+}
+
+input[type="number"] {
+	max-width: 3.25rem;
+	-webkit-appearance: textfield;
+	-moz-appearance: textfield;
+	appearance: textfield;
+}
+
+.utils {
+	position: absolute;
+	top: 83.66vh;
+	left: 0px;
+	padding: 1rem;
+	padding-top: 0.2rem;
+	padding-left: 4rem;
+}
+
+.util-button {
+	max-width: 3rem;
+	width: 3rem;
+	max-height: 3rem;
+	height: 3rem;
+	border-radius: 4px;
+	opacity: 1;
+}
+
+.util-button:hover {
+	opacity: 0.5;
+}
+
+.util-button:active {
+	opacity: 0.9;
+}
+
+.util-button > img {
+	max-width: 2.5rem;
+	width: 2.5rem;
+	max-height: 2.5rem;
+	height: 2.5rem;
+	margin: auto;
+}
+
+h3 {
+	padding-top: 1rem;
+	margin: 0px;
+	color: #fff
+}
+
+p, h1, h2, h3, input, button {
+	font-family: 'Open Sans', sans-serif;
+} 

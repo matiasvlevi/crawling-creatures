@@ -2,7 +2,7 @@
 function setup() {
 	simulation = new Simulation({
 		distance: 1000,
-		roundTime: 2200,
+		roundTime: 2000,
 		mutationRate: 1.5,
 		firstPopulation: 512,
 		population: 128

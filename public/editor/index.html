@@ -1,12 +1,94 @@
 <html>
 
 	<head>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="./style.css"/>
+
+		<script src="../src/lib/matter.min.js"></script>
 		<script src="../src/lib/p5.min.js"></script>
 	
+		<script src="../src/lib/p5-matter/BlockCore.js"></script>
+		<script src="../src/lib/p5-matter/Block.js"></script>
+		<script src="../src/lib/p5-matter/Ball.js"></script>
 
+
+		<script src="../src/editor/spawnpoint.js"></script>
+		<script src="../src/editor/editor.js"></script>
 		<script src="./main.js"></script>
 	</head>
 
-	<body style="margin:0px;"></body>
+	<body style="margin:0px;">
+		<div class="options">
+			<div class="entry">
+				<h3>Simulation Editor</h3>
+			</div>
+			<div id="vertical" class="entry">
+				<input placeholder="Simulation name" type="text"/>
+				<textarea rows="6" placeholder="description"></textarea>
+			</div>
+			<div id="vertical" class="entry">
+				<div 
+					title="Quantity of creatures in the first generation"
+					id="horizontal" 
+					class="labeled-input"
+				>
+					<p>first population</p> <input min="1" max="2048" value="128" type="number"/>
+				</div>	
+				<div
+					title="Quantity of creatures in 1 generation"
+					id="horizontal" 
+					class="labeled-input"
+				>
+					<p>population</p> <input min="1" max="1024" value="64" type="number"/>
+				</div>	
+				<div 
+					title="Duration of one round in ticks"
+					id="horizontal"
+					class="labeled-input"
+				>
+					<p>round time</p> <input min="200" max="50000" value="2000" type="number"/>
+				</div>
+				<div 
+					title="Distance the creature needs to walk to be considered fit for the next generation"
+					id="horizontal"
+					class="labeled-input"
+				>
+					<p>pass distance</p> <input min="400" max="2500" value="1000" type="number"/>
+				</div>	
+				<div 
+					title="percent of rare mutations, creatures will change strain names"
+					id="horizontal"
+					class="labeled-input"
+				>
+					<p>mutation rate</p> <input min="0" max="100" value="1" type="number"/>
+				</div>	
+			</div>
+			<div class="entry">
+				<input placeholder="Simulation name" type="text"/>
+			</div>
+			<div class="entry">
+				<input placeholder="Simulation name" type="text"/>
+			</div>
+		</div>
+		<div class="utils">
+			<button onClick="editor.setType('Spawnpoint')" class="util-button">
+				<img src="./assets/spawnpoint.svg"/>
+			</button>
+			<button onClick="editor.setType('Ball')" class="util-button">
+				<img src="./assets/ball.svg"/>
+			</button>
+			<button onClick="editor.setType('Block')" class="util-button">
+				<img src="./assets/box.svg"/>
+			</button>
+			<button onClick="editor.toggle('grid')" class="util-button">
+				<img src="./assets/grid.svg"/>
+			</button>
+			<button onClick="editor.toggle('snap')" class="util-button">
+				<img src="./assets/snap.svg"/>
+			</button>
+		</div>
+	</body>
 
 </html>
