@@ -6,17 +6,19 @@
 		<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
 		<link rel="stylesheet" href="./style.css"/>
 
-		<script src="../src/lib/matter.min.js"></script>
-		<script src="../src/lib/p5.min.js"></script>
-	
-		<script src="../src/lib/p5-matter/BlockCore.js"></script>
-		<script src="../src/lib/p5-matter/Block.js"></script>
-		<script src="../src/lib/p5-matter/Ball.js"></script>
+		<!-- Libraries -->
+		<script src="../lib/matter.min.js"></script>
+		<script src="../lib/p5.min.js"></script>
+		
+		<!-- p5-matter bindings -->
+		<script src="../lib/p5-matter/BlockCore.js"></script>
+		<script src="../lib/p5-matter/Block.js"></script>
+		<script src="../lib/p5-matter/Ball.js"></script>
 
 
-		<script src="../src/editor/spawnpoint.js"></script>
-		<script src="../src/editor/editor.js"></script>
-		<script src="./main.js"></script>
+		<!-- simulation bundle -->
+		<script src="../build/editor.min.js"></script>
+
 	</head>
 
 	<body style="margin:0px;">
@@ -82,6 +84,19 @@
 			<button onClick="editor.setType('Block')" class="util-button">
 				<img src="./assets/box.svg"/>
 			</button>
+			<div 
+				title="Size of space incrementations"
+				id="horizontal"
+				class="labeled-input"
+			>
+				<p>Snap size</p> <input 
+					onChange="editor.setSnapSize(document.querySelector('#snapSize').value)" 
+					id="snapSize"
+					min="8" max="256"
+					value="32"
+					type="number"
+				/>
+			</div>	
 			<button onClick="editor.toggle('grid')" class="util-button">
 				<img src="./assets/grid.svg"/>
 			</button>

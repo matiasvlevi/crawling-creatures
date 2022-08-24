@@ -3,6 +3,10 @@ class Spawnpoint {
 	constructor(world, { x, y }) {
 		this.world = world;
 		this.pos = createVector(x, y);
+
+		this.attributes = {
+			label: 'Spawnpoint'
+		};
 	}
 	static draw(x, y) {
 		push();
