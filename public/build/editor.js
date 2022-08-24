@@ -75,7 +75,15 @@ class Editor {
 			grid: true,
 			snap: false
 		};
-
+		
+		this.sideMenu = {
+			distance: 1800,
+			mutationRate: 1.5,
+			firstPopulation: 128,
+			population: 64,
+			roundTime: 2000
+		};
+			
 		this.bodies = [];
 
 		this.release = true;
@@ -130,14 +138,20 @@ class Editor {
 		}
 	};
 
+	setSideMenuValue(key, value) {
+		this.sideMenu[key] = value;
+	} 
+
 	setType(type) {
-		this.placement.size.x = 32;
-		this.placement.size.y = 32;
+		this.placement.size.x = this.placement.gridSize;
+		this.placement.size.y = this.placement.gridSize;
 		if (Editor.bodies[type] === undefined) return;
 		this.placement.body = Editor.bodies[type];
 	}
 	
 	setSnapSize(size) {
+		this.placement.size.x = size;
+		this.placement.size.y = size;
 		this.placement.gridSize = size;
 	}
  
@@ -195,8 +209,6 @@ class Editor {
 			body.draw();
 		});
 
-
-
 		// Cursor
 		fill(255, 100);
 		noStroke();
@@ -210,6 +222,10 @@ class Editor {
 		);
 
 		pop();
+
+		stroke(255, 0, 0);
+		strokeWeight(2);
+		line(this.sideMenu.distance/1.2, 0, this.sideMenu.distance/1.2, this.space.y);
 
 		stroke(0);
 		noFill();
@@ -256,12 +272,12 @@ function mouseWheel(e) {
 			editor.placement.size.x += abs(delta)/delta * editor.placement.gridSize * 2;
 		}
 	} else {
-		if (editor.placement.size.x >= delta)
+		if (editor.placement.size.x >= editor.placement.gridSize)
 			editor.placement.size.x += abs(delta)/delta * editor.placement.gridSize * 2;
 		else
 			editor.placement.size.x = abs(delta)/delta * editor.placement.gridSize * 2;
 
-		if (editor.placement.size.y >= delta)
+		if (editor.placement.size.y >= editor.placement.gridSize)
 			editor.placement.size.y += abs(delta)/delta * editor.placement.gridSize * 2;
 		else
 			editor.placement.size.y = abs(delta)/delta * editor.placement.gridSize * 2;

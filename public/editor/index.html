@@ -36,35 +36,65 @@
 					id="horizontal" 
 					class="labeled-input"
 				>
-					<p>first population</p> <input min="1" max="2048" value="128" type="number"/>
+					<p>first population</p> <input
+						id="firstPopulation"
+						onChange="editor.setSideMenuValue('firstPopulation', document.querySelector('#firstPopulation').value)" 
+						min="1" max="1024"
+						value="128"
+						type="number"
+					/>
 				</div>	
 				<div
 					title="Quantity of creatures in 1 generation"
 					id="horizontal" 
 					class="labeled-input"
 				>
-					<p>population</p> <input min="1" max="1024" value="64" type="number"/>
+					<p>population</p> <input
+						id="population"
+						onChange="editor.setSideMenuValue('population', document.querySelector('#population').value)" 
+						min="1" max="1024"
+						value="64"
+						type="number"
+					/>
 				</div>	
 				<div 
 					title="Duration of one round in ticks"
 					id="horizontal"
 					class="labeled-input"
 				>
-					<p>round time</p> <input min="200" max="50000" value="2000" type="number"/>
+					<p>round time</p> <input 
+						id="roundTime"
+						onChange="editor.setSideMenuValue('roundTime', document.querySelector('#roundTime').value)"
+						min="200" max="50000"
+						value="2000"
+						type="number"
+					/>
 				</div>
 				<div 
 					title="Distance the creature needs to walk to be considered fit for the next generation"
 					id="horizontal"
 					class="labeled-input"
 				>
-					<p>pass distance</p> <input min="400" max="2500" value="1000" type="number"/>
+					<p>pass distance</p> <input 
+						id="distance"
+						onChange="editor.setSideMenuValue('distance', document.querySelector('#distance').value)"
+						min="400" max="2500"
+						value="1000"
+						type="number"
+					/>
 				</div>	
 				<div 
 					title="percent of rare mutations, creatures will change strain names"
 					id="horizontal"
 					class="labeled-input"
 				>
-					<p>mutation rate</p> <input min="0" max="100" value="1" type="number"/>
+					<p>mutation rate</p> <input 
+						id="mutationRate"
+						onChange="editor.setSideMenuValue('mutationRate', document.querySelector('#mutationRate').value)"
+						min="0" max="100"
+						value="1"
+						type="number"
+						/>
 				</div>	
 			</div>
 			<div class="entry">
@@ -75,13 +105,13 @@
 			</div>
 		</div>
 		<div class="utils">
-			<button onClick="editor.setType('Spawnpoint')" class="util-button">
+			<button title="Place Spawnpoint" onClick="editor.setType('Spawnpoint')" class="util-button">
 				<img src="./assets/spawnpoint.svg"/>
 			</button>
-			<button onClick="editor.setType('Ball')" class="util-button">
+			<button title="Place Circles" onClick="editor.setType('Ball')" class="util-button">
 				<img src="./assets/ball.svg"/>
 			</button>
-			<button onClick="editor.setType('Block')" class="util-button">
+			<button title="Place Blocks" onClick="editor.setType('Block')" class="util-button">
 				<img src="./assets/box.svg"/>
 			</button>
 			<div 
@@ -97,10 +127,10 @@
 					type="number"
 				/>
 			</div>	
-			<button onClick="editor.toggle('grid')" class="util-button">
+			<button title="Show grid" onClick="editor.toggle('grid')" class="util-button">
 				<img src="./assets/grid.svg"/>
 			</button>
-			<button onClick="editor.toggle('snap')" class="util-button">
+			<button title="Toggle grid snap" onClick="editor.toggle('snap')" class="util-button">
 				<img src="./assets/snap.svg"/>
 			</button>
 		</div>
