@@ -1,23 +1,6 @@
 
-Simulation.http = function({
-	ip,
-	port,
-	path,
-	method,
-	body
-}) {
-	fetch(`http://${ip}:${port}/${path}`, {
-		method,
-		body: body === undefined ? undefined : JSON.stringify(body),
-		headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json'
-		}
-	});
-}
-
 Simulation.prototype.uploadGraph = function() {
-	Simulation.http({
+	Server.http({
 		ip: '127.0.0.1',
 		port: '3000',
 		method: 'post',

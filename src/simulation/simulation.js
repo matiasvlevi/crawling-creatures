@@ -12,6 +12,11 @@ class Simulation {
 			y: window.innerHeight
 		};
 
+		this.spawn = {
+			x: 260,
+			y: this.window.y - 360
+		}
+
 		this.cycles = 1;
 
 		this.mutationRate = mutationRate || 1.5;
@@ -42,15 +47,15 @@ class Simulation {
 
 		this.creature = new Creature(
 			this,
-			this.offset + 260,
-			this.window.y - 360,
+			this.spawn.x,
+			this.spawn.y,
 			random(3, 6),
 			this.creatureConfigs[0], // CLEAN THIS CONSTRUCTOR
 			this.creatureConfigs
 		);
 
-		this.ground = makeGround(this);
 		this.obstacles = makeObstacles(this);
+		this.obstacles.push(makeGround(this));
 
 		this.btnIncrementCycle = new Button({
 			x: 110,
@@ -130,7 +135,6 @@ class Simulation {
 		push();
 		translate(this.offset, 0);
 
-		this.ground.draw();
 		this.obstacles.forEach(o => o.draw());
 
 		stroke(255, 0, 0, 80);

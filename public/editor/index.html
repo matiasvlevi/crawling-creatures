@@ -17,7 +17,7 @@
 
 
 		<!-- simulation bundle -->
-		<script src="../build/editor.min.js"></script>
+		<script src="../build/editor.js"></script>
 
 	</head>
 
@@ -27,8 +27,8 @@
 				<h3>Simulation Editor</h3>
 			</div>
 			<div id="vertical" class="entry">
-				<input placeholder="Simulation name" type="text"/>
-				<textarea rows="6" placeholder="description"></textarea>
+				<input id="simulationName" placeholder="Simulation name" type="text"/>
+				<textarea id="simulationDescription" rows="6" placeholder="description"></textarea>
 			</div>
 			<div id="vertical" class="entry">
 				<div 
@@ -98,10 +98,7 @@
 				</div>	
 			</div>
 			<div class="entry">
-				<input placeholder="Simulation name" type="text"/>
-			</div>
-			<div class="entry">
-				<input placeholder="Simulation name" type="text"/>
+				<button onClick="editor.sendSimulationData()">Save</button>	
 			</div>
 		</div>
 		<div class="utils">

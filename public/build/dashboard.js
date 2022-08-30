@@ -1,6 +1,6 @@
 /*!
  genetic-creatures v1.0.0 by Matias Vazquez-Levi 
- Build date: 2022-08-24
+ Build date: 2022-08-29
  License: MIT
 */
 class Graph {
@@ -160,7 +160,8 @@ class Graph {
 		pop();
 	}
 }
-;const wnx = window.innerWidth,
+
+const wnx = window.innerWidth,
 	  wny = window.innerHeight;
 
 let currentGen;

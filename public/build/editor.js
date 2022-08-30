@@ -1,8 +1,29 @@
 /*!
  genetic-creatures v1.0.0 by Matias Vazquez-Levi 
- Build date: 2022-08-24
+ Build date: 2022-08-29
  License: MIT
 */
+class Server {
+	constructor() {}
+	static async http ({
+		ip,
+		port,
+		path,
+		method,
+		body
+	}) {
+		return fetch(`http://${ip}:${port}/${path}`, {
+			method,
+			body: body === undefined ? undefined : JSON.stringify(body),
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			}
+		}).then(res => res.json());
+	}
+};
+
+
 
 class Spawnpoint {
 	constructor(world, { x, y }) {
@@ -43,7 +64,8 @@ class Spawnpoint {
 		pop();
 	}
 }
-;
+
+
 class Editor {
 	constructor() {
 
@@ -89,6 +111,8 @@ class Editor {
 		this.release = true;
 		this._timer = 0;
 		this._cooldown = 10;
+
+		this.spawnExists = false;
 	}
 
 	static bodies = {
@@ -103,10 +127,11 @@ class Editor {
 				color: '#222'
 			}),
 			parse: (component) => ({
-				x: component.body.position.x,
-				y: component.body.position.y,
-				w: component.attributes.w,
-				h: component.attrubutes.h
+				x: component.body.position.x * 1.2,
+				y: component.body.position.y * 1.2,
+				w: component.attributes.w * 1.2,
+				h: component.attributes.h * 1.2,
+				type: component.body.label.split(' ')[0]
 			})
 		},
 		Ball: {
@@ -119,24 +144,62 @@ class Editor {
 				color: '#222'
 			}),
 			parse: (component) => ({
-				x: component.body.position.x,
-				y: component.body.position.y,
-				r: component.attributes.r,
+				x: component.body.position.x * 1.2,
+				y: component.body.position.y * 1.2,
+				r: component.attributes.r * 1.2,
+				type: component.body.label.split(' ')[0]
 			})
 		},
 		Spawnpoint: {
 			Component: Spawnpoint,
 			shape: (function() {Spawnpoint.draw(...arguments)}),
-			config: (ref) => ({
-				x: ref.mouse().x,
-				y: ref.mouse().y
-			}),
-			parse: (component) => ({
-				x: component.pos.x,
-				y: component.pos.y,
-			})
+			config: (ref) => {
+				ref.spawnExists = true;
+				return {
+					x: ref.mouse().x * 1.2,
+					y: ref.mouse().y * 1.2
+				}
+			},
+			parse: (component) => {
+				return{
+					x: component.pos.x,
+					y: component.pos.y,
+					type: 'Spawnpoint'
+				}
+			}
 		}
 	};
+
+	getData() {
+		let name = document.querySelector('#simulationName').value;
+		let desc = document.querySelector('#simulationDescription').value; 
+		return {
+			bodies: this.bodies.map(
+				o => Editor.bodies[o.constructor.name].parse(o)
+			),
+			meta: {
+				description: desc.length !== 0 ? desc : 'No Description',
+				name:  name.length !== 0 ? name : 'No Name'
+			},
+			metrics: {
+				firstPopulation: document.querySelector('#firstPopulation').value,
+				population:  document.querySelector('#population').value,
+				distance:  document.querySelector('#distance').value,
+				roundTime:  document.querySelector('#roundTime').value,
+				mutationRate:  document.querySelector('#mutationRate').value
+			}
+		}
+	}
+
+	sendSimulationData() {
+		Server.http({
+			ip: '127.0.0.1',
+			port: '3000',
+			path: 'saveSimulation',
+			method: 'post',
+			body: this.getData()
+		});	
+	}
 
 	setSideMenuValue(key, value) {
 		this.sideMenu[key] = value;
@@ -159,6 +222,27 @@ class Editor {
 		this.toggleOptions[key] = !this.toggleOptions[key];
 	}
 
+	scaleBody(axis, delta) {
+		if (this.placement.size[axis] >= this.placement.gridSize)
+			this.placement.size[axis] += abs(delta)/delta * this.placement.gridSize * 2;
+		else 
+			this.placement.size[axis] = this.placement.gridSize;
+	}	
+
+	mouseWheel(e) {
+		let delta = e.delta/45;
+		if (
+			keyIsPressed &&
+			this.placement.body.Component.name != 'Ball' // Handle these exceptions a different way
+		) {
+			if (keyCode === 89) this.scaleBody('y', delta);
+			else if (keyCode === 88) this.scaleBody('x', delta);
+		} else {
+			this.scaleBody('y', delta);
+			this.scaleBody('x', delta);
+		}
+	}
+
 	event() {
 		if (
 			mouseIsPressed &&
@@ -168,15 +252,29 @@ class Editor {
 			this.mouse().x < this.space.x &&
 			this.mouse().y < this.space.y
 		) {
-			this.bodies.push(
-				new this.placement.body.Component(
-					this.world,
-					this.placement.body.config(
-						this,
-						this.placement.size
+			if (!(this.placement.body.Component === Spawnpoint && this.spawnExists)) {
+				// Push a new body
+				this.bodies.push(
+					new this.placement.body.Component(
+						this.world,
+						this.placement.body.config(
+							this,
+							this.placement.size
+						)
 					)
-				)
-			);
+				);
+
+			} else {
+				// Move spawnpoint instead of pushing a new one
+				for (key in this.bodies) {
+					if (this.bodies[key] instanceof Spawnpoint) {
+						this.bodies[key].pos.x = this.mouse().x;
+						this.bodies[key].pos.y = this.mouse().y;
+						break;
+					}
+				}
+			}
+
 			this.previous.mouseX = this.mouse().x;
 			this.previous.mouseY = this.mouse().y;
 
@@ -200,6 +298,7 @@ class Editor {
 	draw() {
 		push();
 
+		// Grid lines
 		if (this.toggleOptions.grid) {
 			this.drawGrid();
 		}
@@ -238,15 +337,6 @@ class Editor {
 		rect(0, this.space.y, this.window.x, this.window.y - this.space.y)
 	}
 
-	getData() {
-		let data = this.bodies.map(o => {
-			let data = this.placement.body.parse(o); 
-			data.type = o.attributes.label.split(' ')[0];
-			return data; 
-		})
-		return data;
-	}
-
 	drawGrid() {	
 		push();
 
@@ -264,24 +354,7 @@ class Editor {
 }
 
 function mouseWheel(e) {	
-	let delta = e.delta/45;
-	if (keyIsPressed) {	
-		if (keyCode === 89) {
-			editor.placement.size.y += abs(delta)/delta * editor.placement.gridSize * 2;
-		} else if (keyCode === 88) {
-			editor.placement.size.x += abs(delta)/delta * editor.placement.gridSize * 2;
-		}
-	} else {
-		if (editor.placement.size.x >= editor.placement.gridSize)
-			editor.placement.size.x += abs(delta)/delta * editor.placement.gridSize * 2;
-		else
-			editor.placement.size.x = abs(delta)/delta * editor.placement.gridSize * 2;
-
-		if (editor.placement.size.y >= editor.placement.gridSize)
-			editor.placement.size.y += abs(delta)/delta * editor.placement.gridSize * 2;
-		else
-			editor.placement.size.y = abs(delta)/delta * editor.placement.gridSize * 2;
-	}
+	editor.mouseWheel(e);
 }
 
 function mousePressed() {
@@ -293,7 +366,8 @@ function mouseReleased() {
 }
 
 let editor;
-;
+
+
 function setup() {
 	editor = new Editor();
 

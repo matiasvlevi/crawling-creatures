@@ -3,10 +3,10 @@ function makeObstacles(sim) {
 	for (let i = 0; i < 64; i++) {
 		obstacles.push(
 			new Block(sim.world, {
-				x: random(0, (i+1)/4 * sim.distance) + 850,
-				y: sim.window.y - random(-15, 10),
-				w: random(80, 120),
-				h: random(80, 120),
+				x: random(0, (i+1)/8 * sim.distance) + 900,
+				y: sim.window.y - random(-40, 10),
+				w: random(110, 150),
+				h: random(110, 150),
 				color: '#222'
 			},
 			{

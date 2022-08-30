@@ -1,7 +1,10 @@
 <html>
 
 	<head>
-		
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">	
+		<link href="./style.css" rel="stylesheet">
 		<!-- Libraries -->
 		<script src="../lib/matter.min.js"></script>
 		<script src="../lib/p5.min.js"></script>
@@ -12,10 +15,21 @@
 		<script src="../lib/p5-matter/Ball.js"></script>
 
 		<!-- simulation bundle -->
-		<script src="../build/simulation.min.js"></script>
+		<script src="../build/simulation.js"></script>
+
+		<style>
+	
+		</style>
 
 	</head>
 
-	<body style="margin:0px;"></body>
+	<body style="margin:0px;">
+		
+		<div class="floating">
+			<div class="menu"></div>
+			<button class="loadBtn" onClick="Simulation.loadSims()">Load Simulation</button>
+		</div>
+
+	</body>
 
 </html>

@@ -36,8 +36,8 @@ Simulation.prototype.nextCreature = function() {
 	// Initialize new Creature
     this.creature = new Creature(
         this,
-        this.offset + 260,
-        this.window.y - 260,
+        this.spawn.x,
+        this.spawn.y,
         5,
         this.creatureConfigs[this.currentIndex], // CLEAN THIS CONSTRUCTOR
         this.creatureConfigs

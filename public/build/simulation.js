@@ -1,6 +1,6 @@
 /*!
  genetic-creatures v1.0.0 by Matias Vazquez-Levi 
- Build date: 2022-08-24
+ Build date: 2022-08-29
  License: MIT
 */
 class Graph {
@@ -160,7 +160,29 @@ class Graph {
 		pop();
 	}
 }
-;
+
+class Server {
+	constructor() {}
+	static async http ({
+		ip,
+		port,
+		path,
+		method,
+		body
+	}) {
+		return fetch(`http://${ip}:${port}/${path}`, {
+			method,
+			body: body === undefined ? undefined : JSON.stringify(body),
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			}
+		}).then(res => res.json());
+	}
+};
+
+
+
 class Simulation {
 	constructor({
 		mutationRate,
@@ -173,6 +195,11 @@ class Simulation {
 			x: window.innerWidth,
 			y: window.innerHeight
 		};
+
+		this.spawn = {
+			x: 260,
+			y: this.window.y - 360
+		}
 
 		this.cycles = 1;
 
@@ -204,15 +231,15 @@ class Simulation {
 
 		this.creature = new Creature(
 			this,
-			this.offset + 260,
-			this.window.y - 360,
+			this.spawn.x,
+			this.spawn.y,
 			random(3, 6),
 			this.creatureConfigs[0], // CLEAN THIS CONSTRUCTOR
 			this.creatureConfigs
 		);
 
-		this.ground = makeGround(this);
 		this.obstacles = makeObstacles(this);
+		this.obstacles.push(makeGround(this));
 
 		this.btnIncrementCycle = new Button({
 			x: 110,
@@ -292,7 +319,6 @@ class Simulation {
 		push();
 		translate(this.offset, 0);
 
-		this.ground.draw();
 		this.obstacles.forEach(o => o.draw());
 
 		stroke(255, 0, 0, 80);
@@ -328,7 +354,139 @@ class Simulation {
 }
 
 let simulation;
-;
+
+
+Simulation.loadSims = async function() {
+	const menu = document.querySelector('.menu');
+	const button = document.querySelector('.loadBtn');
+
+	if (menu.style.display !== 'none') {
+
+		menu.replaceChildren();
+		menu.style.display = 'none';
+		button.innerHTML = 'Load Simulation';
+		return;
+	}
+
+	const data = await Server.http({
+		ip: '127.0.0.1',
+		port: '3000',
+		path: 'getSimulations',
+		method: 'get'
+	});
+
+	
+	data.maps.forEach(map => {
+
+		console.log(map);
+
+		let mapDiv = document.createElement('div');
+		mapDiv.setAttribute('class', 'element');
+		mapDiv.setAttribute('onClick', `simulation.loadSimulation("${map.name}")`);
+
+		let name = document.createElement('h4');
+		name.innerHTML = map.name;
+		let desc = document.createElement('p');
+		desc.innerHTML = map.description;
+
+		mapDiv.appendChild(name);
+		mapDiv.appendChild(desc);
+
+		menu.appendChild(mapDiv);
+		menu.style.display = 'flex';
+
+		button.innerHTML = 'Close';
+	});	
+
+}
+
+Simulation.prototype.clearMatterBodies = function(bodies) {
+	bodies.forEach(body => {
+		console.log(body)
+		Matter.World.remove(this.world, body.body);
+	})
+}
+
+Simulation.prototype.makeObstaclesFrom = function(bodies) {
+	let obstacles = [];
+	bodies.forEach(body => {
+
+		let Component;
+		switch(body.type) {
+			case 'Rectangle':
+				Component = Block;
+				break;
+			case 'Circle':
+				Component = Ball;
+				break;
+			case 'Spawnpoint':
+				this.spawn.x = body.x;
+				this.spawn.y = body.y;
+				return;
+			default:
+				break;
+		}
+
+		delete body.type;
+		body.color = '#222';
+		obstacles.push(new Component(
+			this.world, 
+			body,
+			{ isStatic: true }
+		));
+	});
+	return obstacles;
+}
+
+Simulation.prototype.reloadSimulation = function(config) {
+	this.cycles = 1;
+	
+	this.mutationRate = config.metrics.mutationRate || 1.5;
+	this.distance = config.metrics.distance || 1000;
+	this.roundTime = config.metrics.roundTime || 2500;
+	this.firstGenPop = config.metrics.firstPopulation || 128;
+	this.genPop = config.metrics.population || 48;
+
+	this._timer = 0;
+	this.offset = 0;
+	this.running = true;
+
+	this.currentGen = 0;
+	this.currentIndex = 0;
+	this.bests = [];
+	this.bestIndex = 0;
+	this.bestScore = 0;
+
+	let generation = this.makeRandomGeneration();
+
+	this.baseStats = generation.defaultStats;
+	this.graph = this.initGraph(generation);	
+	
+	this.creature = new Creature(
+		this,
+		this.offset + 260,
+		this.window.y - 360,
+		random(3, 6),
+		this.creatureConfigs[0], // CLEAN THIS CONSTRUCTOR
+		this.creatureConfigs
+	);
+
+	this.clearMatterBodies(this.obstacles);
+	this.obstacles = this.makeObstaclesFrom(config.bodies);
+}
+
+Simulation.prototype.loadSimulation = async function (name) {
+	const data = await Server.http({
+		ip: '127.0.0.1',
+		port: '3000',
+		path: `getSimulation?id=${name}`,
+		method: 'get'
+	});
+
+	this.reloadSimulation(data);
+}
+
+
 Simulation.prototype.endLine = function() {
 	push()
 
@@ -342,7 +500,8 @@ Simulation.prototype.endLine = function() {
 	
 	pop();
 }
-;
+
+
 Simulation.prototype.endMessage = function() {
 	push();
 	textSize(72);
@@ -353,7 +512,8 @@ Simulation.prototype.endMessage = function() {
 	text("No creature qualified", this.window.x / 2, this.window.y / 2 + 90);
 	pop();
 }
-;class Button {
+
+class Button {
 	constructor({ x, y, w, h, event, text }) {
 		this.pos = createVector(x || 0, y || 0);
 		this.size = createVector(w || 50, h || 50);
@@ -415,7 +575,8 @@ Simulation.prototype.scoreBoard = function() {
 
 	pop();
 }
-;
+
+
 Simulation.prototype.getBestCreatures = function() {
 	let configs = [];
 	for (let i = 0; i < this.bests.length; i++) {
@@ -423,7 +584,8 @@ Simulation.prototype.getBestCreatures = function() {
 	}
 	return configs;
 }
-;
+
+
 Simulation.prototype.makeRandomGeneration = function() {
 	this.creatureConfigs = [];
 	let defaultStats = {};
@@ -446,26 +608,10 @@ Simulation.prototype.makeRandomGeneration = function() {
 
 	return  { stats, defaultStats };
 }
-;
-Simulation.http = function({
-	ip,
-	port,
-	path,
-	method,
-	body
-}) {
-	fetch(`http://${ip}:${port}/${path}`, {
-		method,
-		body: body === undefined ? undefined : JSON.stringify(body),
-		headers: {
-			'Accept': 'application/json',
-			'Content-Type': 'application/json'
-		}
-	});
-}
+
 
 Simulation.prototype.uploadGraph = function() {
-	Simulation.http({
+	Server.http({
 		ip: '127.0.0.1',
 		port: '3000',
 		method: 'post',
@@ -514,7 +660,8 @@ Simulation.prototype.newGeneration = function() {
 
 	return false;
 }
-;let currentGen = 0;
+
+let currentGen = 0;
 let currentCreature = 0;
 let currentIndex = 0;
 
@@ -552,8 +699,8 @@ Simulation.prototype.nextCreature = function() {
 	// Initialize new Creature
     this.creature = new Creature(
         this,
-        this.offset + 260,
-        this.window.y - 260,
+        this.spawn.x,
+        this.spawn.y,
         5,
         this.creatureConfigs[this.currentIndex], // CLEAN THIS CONSTRUCTOR
         this.creatureConfigs
@@ -561,7 +708,8 @@ Simulation.prototype.nextCreature = function() {
 
     return true;
 }
-;let NAMES = [
+
+let NAMES = [
 "Michael",
 "Christopher",
 "Jessica",
@@ -1062,7 +1210,8 @@ Simulation.prototype.nextCreature = function() {
 "Randi",
 "Maggie",
 "Charlotte"
-];;let LAST_NAMES = [ 
+];
+let LAST_NAMES = [ 
 "SMITH",
 "JOHNSON",
 "WILLIAMS",
@@ -2151,7 +2300,8 @@ function getLastName(creatures) {
 
 	return fullname;
 }
-;function makeGround(sim) {
+
+function makeGround(sim) {
 	let ground = new Block(
 		sim.world,
 		{
@@ -2170,15 +2320,16 @@ function getLastName(creatures) {
     return ground;
 }
 
-;function makeObstacles(sim) {
+
+function makeObstacles(sim) {
     let obstacles = [];
 	for (let i = 0; i < 64; i++) {
 		obstacles.push(
 			new Block(sim.world, {
-				x: random(0, (i+1)/4 * sim.distance) + 850,
-				y: sim.window.y - random(-15, 10),
-				w: random(80, 120),
-				h: random(80, 120),
+				x: random(0, (i+1)/8 * sim.distance) + 900,
+				y: sim.window.y - random(-40, 10),
+				w: random(110, 150),
+				h: random(110, 150),
 				color: '#222'
 			},
 			{
@@ -2190,7 +2341,8 @@ function getLastName(creatures) {
 
     return obstacles;
 }
-;class Creature {
+
+class Creature {
 	constructor(simulation, x = 0, y = 0, n = 2, config = undefined, others = undefined) {
 	
 		this.simulation = simulation;
@@ -2434,7 +2586,8 @@ function getLastName(creatures) {
 		this.masses.forEach(m => m.draw());
 	}
 }
-;
+
+
 function setup() {
 	simulation = new Simulation({
 		distance: 1000,

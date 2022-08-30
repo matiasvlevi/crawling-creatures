@@ -1,12 +1,14 @@
 const concatConfig = {
 	editor: [
+		'./src/lib/http.js',
 		'./src/editor/spawnpoint.js',
 		'./src/editor/editor.js',
 		'./src/editor/main.js'
 	],
 	simulation:[
-		'./src/lib/graph.js',
+		'./src/lib/*.js',
 		'./src/simulation/simulation.js',
+		'./src/simulation/load/*.js',
 		'./src/simulation/widgets/*.js',
 		'./src/simulation/genetics/*.js',
 		'./src/simulation/names/*.js',
@@ -29,7 +31,7 @@ module.exports = function (grunt) {
 		pkg: grunt.file.readJSON('package.json'),
 		concat: {
 			options: {
-				separator: ';',
+				separator: '\n',
 				banner: '/*!\n <%= pkg.name %> v<%= pkg.version %> by <%= pkg.author %> \n' +
 						' Build date: <%= grunt.template.today("yyyy-mm-dd") %>\n' + 
 						' License: <%= pkg.license %>\n*/\n',
