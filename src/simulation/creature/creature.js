@@ -45,8 +45,10 @@ class Creature {
 			this.masses[i].body.frictionStatic = beats[i].friction;
 			this.masses[i].body.friction = beats[i].friction;
 			this.masses[i].attributes.color = `#${color}${color}${color}`
-			this.masses[i].body.mass = beats[i].mass;
-			this.masses[i].body.slop = 0;
+			//this.masses[i].body.mass = beats[i].mass;
+			this.masses[i].body.slop = 0.9;
+			this.masses[i].body.density = Infinity;
+			this.masses[i].body.restitution = 1;
 
 		}	
 		for (let j = 0; j < links.length; j++) {
@@ -68,12 +70,12 @@ class Creature {
 			beats.push({
 				rate: random(4, 64),
 				current: 0,
-				initial: random(12, 160),
+				initial: random(14, 90),
 				stiffness: random(0.05, 0.1),
 				damping: random(0, 1.5),
 				friction: random(0, 1),
-				mass: random(10, 1500),
-				contraction: random(0.9, 1.1)
+				mass: random(100, 800),
+				contraction: random(0.87, 0.99)
 			});
 			for (let j = 0; j < floor(random(2, n+1)); j++) {
 				let ran = 0;

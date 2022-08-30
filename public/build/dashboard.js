@@ -1,6 +1,6 @@
 /*!
  genetic-creatures v1.0.0 by Matias Vazquez-Levi 
- Build date: 2022-08-29
+ Build date: 2022-08-30
  License: MIT
 */
 class Graph {

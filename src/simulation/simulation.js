@@ -35,10 +35,13 @@ class Simulation {
 		this.bestIndex = 0;
 		this.bestScore = 0;
 
-		this.engine = Matter.Engine.create();
-		this.engine.timing.timeScale = 1.2;
+		this.engine = Matter.Engine.create({
+			positionIterations: 4,
+			velocityIterations: 4,
+			constraintIterations: 7
+		});
 		this.world = this.engine.world;
-		this.world.gravity.y = 5;
+		this.world.gravity.y = 1.5;
 
 		let generation = this.makeRandomGeneration();
 		
@@ -134,6 +137,14 @@ class Simulation {
 	draw() {
 		push();
 		translate(this.offset, 0);
+
+
+		push();
+		stroke(255, 0, 0);
+		strokeWeight(3);
+		noFill();
+		ellipse(this.spawn.x, this.spawn.y, 260);
+		pop();
 
 		this.obstacles.forEach(o => o.draw());
 

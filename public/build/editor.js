@@ -1,6 +1,6 @@
 /*!
  genetic-creatures v1.0.0 by Matias Vazquez-Levi 
- Build date: 2022-08-29
+ Build date: 2022-08-30
  License: MIT
 */
 class Server {
@@ -26,9 +26,11 @@ class Server {
 
 
 class Spawnpoint {
-	constructor(world, { x, y }) {
+	constructor(world, { x, y, r }) {
 		this.world = world;
 		this.pos = createVector(x, y);
+		this.radius = r;
+
 
 		this.attributes = {
 			label: 'Spawnpoint'
@@ -40,7 +42,7 @@ class Spawnpoint {
 		stroke(255, 100);
 		strokeWeight(3);
 		noFill();
-		circle(x, y, 260);
+		circle(x, y, 260/1.2);
 
 		noStroke();
 		fill(255, 100);
@@ -55,7 +57,7 @@ class Spawnpoint {
 		stroke(255, 50, 10);
 		strokeWeight(3);
 		noFill();
-		circle(this.pos.x, this.pos.y, 260);
+		circle(this.pos.x, this.pos.y, this.radius);
 
 		noStroke();
 		fill(255, 50, 10);
@@ -84,8 +86,8 @@ class Editor {
 
 		this.placement = {
 			body: Editor.bodies['Block'],
-			size: createVector(32, 32),
-			gridSize: 32
+			size: createVector(64, 64),
+			gridSize: 64
 		};
 		
 		this.previous = {
@@ -156,14 +158,15 @@ class Editor {
 			config: (ref) => {
 				ref.spawnExists = true;
 				return {
-					x: ref.mouse().x * 1.2,
-					y: ref.mouse().y * 1.2
+					x: ref.mouse().x,
+					y: ref.mouse().y,
+					r: 260/1.2
 				}
 			},
 			parse: (component) => {
 				return{
-					x: component.pos.x,
-					y: component.pos.y,
+					x: component.pos.x * 1.2,
+					y: component.pos.y * 1.2,
 					type: 'Spawnpoint'
 				}
 			}
@@ -213,6 +216,7 @@ class Editor {
 	}
 	
 	setSnapSize(size) {
+		if (size < 32) return;
 		this.placement.size.x = size;
 		this.placement.size.y = size;
 		this.placement.gridSize = size;
@@ -231,9 +235,11 @@ class Editor {
 
 	mouseWheel(e) {
 		let delta = e.delta/45;
+		
+		console.log(keyIsPressed, keyCode);
 		if (
-			keyIsPressed &&
-			this.placement.body.Component.name != 'Ball' // Handle these exceptions a different way
+			keyIsPressed //&&
+			//this.placement.body.Component.name != 'Ball' // Handle these exceptions a different way
 		) {
 			if (keyCode === 89) this.scaleBody('y', delta);
 			else if (keyCode === 88) this.scaleBody('x', delta);

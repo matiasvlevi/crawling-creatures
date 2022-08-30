@@ -1,6 +1,5 @@
 Simulation.prototype.clearMatterBodies = function(bodies) {
 	bodies.forEach(body => {
-		console.log(body)
 		Matter.World.remove(this.world, body.body);
 	})
 }

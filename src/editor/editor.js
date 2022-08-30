@@ -17,8 +17,8 @@ class Editor {
 
 		this.placement = {
 			body: Editor.bodies['Block'],
-			size: createVector(32, 32),
-			gridSize: 32
+			size: createVector(64, 64),
+			gridSize: 64
 		};
 		
 		this.previous = {
@@ -89,14 +89,15 @@ class Editor {
 			config: (ref) => {
 				ref.spawnExists = true;
 				return {
-					x: ref.mouse().x * 1.2,
-					y: ref.mouse().y * 1.2
+					x: ref.mouse().x,
+					y: ref.mouse().y,
+					r: 260/1.2
 				}
 			},
 			parse: (component) => {
 				return{
-					x: component.pos.x,
-					y: component.pos.y,
+					x: component.pos.x * 1.2,
+					y: component.pos.y * 1.2,
 					type: 'Spawnpoint'
 				}
 			}
@@ -146,6 +147,7 @@ class Editor {
 	}
 	
 	setSnapSize(size) {
+		if (size < 32) return;
 		this.placement.size.x = size;
 		this.placement.size.y = size;
 		this.placement.gridSize = size;
@@ -164,6 +166,8 @@ class Editor {
 
 	mouseWheel(e) {
 		let delta = e.delta/45;
+		
+		console.log(keyIsPressed, keyCode);
 		if (
 			keyIsPressed &&
 			this.placement.body.Component.name != 'Ball' // Handle these exceptions a different way

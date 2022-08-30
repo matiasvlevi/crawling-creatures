@@ -1,6 +1,6 @@
 /*!
  genetic-creatures v1.0.0 by Matias Vazquez-Levi 
- Build date: 2022-08-29
+ Build date: 2022-08-30
  License: MIT
 */
 class Graph {
@@ -219,10 +219,13 @@ class Simulation {
 		this.bestIndex = 0;
 		this.bestScore = 0;
 
-		this.engine = Matter.Engine.create();
-		this.engine.timing.timeScale = 1.2;
+		this.engine = Matter.Engine.create({
+			positionIterations: 4,
+			velocityIterations: 4,
+			constraintIterations: 7
+		});
 		this.world = this.engine.world;
-		this.world.gravity.y = 5;
+		this.world.gravity.y = 1.5;
 
 		let generation = this.makeRandomGeneration();
 		
@@ -319,6 +322,14 @@ class Simulation {
 		push();
 		translate(this.offset, 0);
 
+
+		push();
+		stroke(255, 0, 0);
+		strokeWeight(3);
+		noFill();
+		ellipse(this.spawn.x, this.spawn.y, 260);
+		pop();
+
 		this.obstacles.forEach(o => o.draw());
 
 		stroke(255, 0, 0, 80);
@@ -402,7 +413,6 @@ Simulation.loadSims = async function() {
 
 Simulation.prototype.clearMatterBodies = function(bodies) {
 	bodies.forEach(body => {
-		console.log(body)
 		Matter.World.remove(this.world, body.body);
 	})
 }
@@ -2389,8 +2399,10 @@ class Creature {
 			this.masses[i].body.frictionStatic = beats[i].friction;
 			this.masses[i].body.friction = beats[i].friction;
 			this.masses[i].attributes.color = `#${color}${color}${color}`
-			this.masses[i].body.mass = beats[i].mass;
-			this.masses[i].body.slop = 0;
+			//this.masses[i].body.mass = beats[i].mass;
+			this.masses[i].body.slop = 0.9;
+			this.masses[i].body.density = Infinity;
+			this.masses[i].body.restitution = 1;
 
 		}	
 		for (let j = 0; j < links.length; j++) {
@@ -2412,12 +2424,12 @@ class Creature {
 			beats.push({
 				rate: random(4, 64),
 				current: 0,
-				initial: random(12, 160),
+				initial: random(14, 90),
 				stiffness: random(0.05, 0.1),
 				damping: random(0, 1.5),
 				friction: random(0, 1),
-				mass: random(10, 1500),
-				contraction: random(0.9, 1.1)
+				mass: random(100, 800),
+				contraction: random(0.87, 0.99)
 			});
 			for (let j = 0; j < floor(random(2, n+1)); j++) {
 				let ran = 0;
