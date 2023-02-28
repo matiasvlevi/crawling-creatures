@@ -25,3 +25,7 @@ npm ci
 ```
 npm start
 ```
+
+Check out the [Preview](https://raw.githack.com/matiasvlevi/crawling-creatures/master/public/play/index.html)!
+
+The full experience requires a deployed server, as shown above.
