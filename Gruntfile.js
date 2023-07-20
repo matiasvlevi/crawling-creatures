@@ -17,10 +17,6 @@ const concatConfig = {
 		'./src/creature/*.js',
 		'./src/simulation/main.js'
 	
-	],
-	dashboard:[
-		'./src/lib/graph.js',
-		'./src/dashboard/main.js'
 	]
 };
 
@@ -43,10 +39,6 @@ module.exports = function (grunt) {
 			simulation: {
 				src: concatConfig.simulation,
 				dest: './public/build/simulation.js'
-			},
-			dashboard: {
-				src: concatConfig.dashboard,
-				dest: './public/build/dashboard.js'
 			}
 		},
 		terser: {
@@ -58,10 +50,6 @@ module.exports = function (grunt) {
 					{
 						src: './public/build/simulation.js',
 						dest: './public/build/simulation.min.js'
-					},
-					{
-						src: './public/build/dashboard.js',
-						dest: './public/build/dashboard.min.js'
 					}
 				]	
 			}

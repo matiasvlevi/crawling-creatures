@@ -1,11 +1,11 @@
 
 function setup() {
 	simulation = new Simulation({
-		distance: 1000,
-		roundTime: 2000,
-		mutationRate: 1.5,
-		firstPopulation: 128,
-		population: 64
+		distance: 800,
+		roundTime: 3000,
+		mutationRate: 2.5,
+		firstPopulation: 256,
+		population: 128
 	});	
 
 	createCanvas(

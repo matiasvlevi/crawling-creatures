@@ -1,0 +1,158 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+
+:root {
+    --bck: #202020;
+    --srf: #313131;
+
+    --on-bck: #DFDFDF;
+    --on-srf: #CECECE;
+}
+
+#no-select {
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+a.button {
+    text-decoration: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+p {
+    font-size: 0.9em;
+}
+
+@keyframes caret {
+
+    from,
+    to {
+        border-color: transparent
+    }
+
+    50% {
+        border-color: var(--on-bck);
+    }
+}
+
+header {
+    display: flex;
+    justify-content: left;
+}
+
+h1.name {
+    margin-top: 0.5rem;
+    margin-bottom: 0px;
+
+    padding-right: 0.4rem;
+}
+
+html,
+body {
+    background-color: var(--bck);
+    color: var(--on-bck);
+    font-family: 'Poppins', 'sans-serif';
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    justify-content: center;
+    align-items: stretch;
+
+    margin: auto;
+    padding: 1.15rem;
+
+    width: 89%;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+}
+
+.title,
+.description {
+    margin: 0.35rem;
+}
+
+.icon {
+    width: 18%;
+}
+
+.link {
+    background-color: var(--srf);
+    color: var(--on-srf);
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1.75rem;
+
+    border-radius: 14px;
+    padding: 1.15rem;
+    padding-left: 1.75rem;
+    padding-right: 1.75rem;
+
+    transition: 0.25s;
+}
+
+.link:active,
+.link:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+
+    transition: 0.25s;
+}
+
+@media (min-width:320px) {
+    main {
+        width: 90%;
+    }
+}
+
+@media (min-width:481px) {
+    main {
+        width: 86%;
+    }
+
+    .link {
+        padding: 1.25rem;
+    }
+}
+
+@media (min-width:641px) {
+    main {
+        width: 76%;
+    }
+}
+
+@media (min-width:961px) {
+    main {
+        width: 58%;
+    }
+
+
+}
+
+@media (min-width:1025px) {
+    main {
+        width: 46%;
+    }
+}
+
+@media (min-width:1281px) {
+    main {
+        width: 32%;
+    }
+
+    .link {
+        padding: 1.8rem;
+    }
+}

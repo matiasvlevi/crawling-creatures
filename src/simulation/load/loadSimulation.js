@@ -32,6 +32,11 @@ Simulation.prototype.makeObstaclesFrom = function(bodies) {
 			{ isStatic: true }
 		));
 	});
+
+
+	// Add floor
+	obstacles.push(makeGround(this));
+
 	return obstacles;
 }
 
@@ -73,12 +78,14 @@ Simulation.prototype.reloadSimulation = function(config) {
 }
 
 Simulation.prototype.loadSimulation = async function (name) {
-	const data = await Server.http({
-		ip: '127.0.0.1',
-		port: '3000',
-		path: `getSimulation?id=${name}`,
-		method: 'get'
-	});
+	// // Server Arch
+	// const data = await Server.http({
+	// 	ip: '127.0.0.1',
+	// 	port: '3000',
+	// 	path: `getSimulation?id=${name}`,
+	// 	method: 'get'
+	// });
 
-	this.reloadSimulation(data);
+	const data = JSON.parse(localStorage.getItem('savedSimulations'));
+	this.reloadSimulation(data[name]);
 }

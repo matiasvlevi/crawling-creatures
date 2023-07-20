@@ -126,13 +126,23 @@ class Editor {
 	}
 
 	sendSimulationData() {
-		Server.http({
-			ip: '127.0.0.1',
-			port: '3000',
-			path: 'saveSimulation',
-			method: 'post',
-			body: this.getData()
-		});	
+
+		// // Server Arch
+		// Server.http({
+		// 	ip: '127.0.0.1',
+		// 	port: '3000',
+		// 	path: 'saveSimulation',
+		// 	method: 'post',
+		// 	body: this.getData()
+		// });	
+
+		// Localstorage
+		let simulations = JSON.parse(localStorage.getItem('savedSimulations'));
+		if (simulations === null) simulations = {};
+
+		const simulationData = this.getData();
+		simulations[simulationData.meta.name] = simulationData
+		localStorage.setItem('savedSimulations', JSON.stringify(simulations));
 	}
 
 	setSideMenuValue(key, value) {

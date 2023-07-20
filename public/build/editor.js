@@ -1,6 +1,6 @@
 /*!
  genetic-creatures v1.0.0 by Matias Vazquez-Levi 
- Build date: 2022-08-30
+ Build date: 2023-07-20
  License: MIT
 */
 class Server {
@@ -195,13 +195,23 @@ class Editor {
 	}
 
 	sendSimulationData() {
-		Server.http({
-			ip: '127.0.0.1',
-			port: '3000',
-			path: 'saveSimulation',
-			method: 'post',
-			body: this.getData()
-		});	
+
+		// // Server Arch
+		// Server.http({
+		// 	ip: '127.0.0.1',
+		// 	port: '3000',
+		// 	path: 'saveSimulation',
+		// 	method: 'post',
+		// 	body: this.getData()
+		// });	
+
+		// Localstorage
+		let simulations = JSON.parse(localStorage.getItem('savedSimulations'));
+		if (simulations === null) simulations = {};
+
+		const simulationData = this.getData();
+		simulations[simulationData.meta.name] = simulationData
+		localStorage.setItem('savedSimulations', JSON.stringify(simulations));
 	}
 
 	setSideMenuValue(key, value) {
@@ -238,8 +248,8 @@ class Editor {
 		
 		console.log(keyIsPressed, keyCode);
 		if (
-			keyIsPressed //&&
-			//this.placement.body.Component.name != 'Ball' // Handle these exceptions a different way
+			keyIsPressed &&
+			this.placement.body.Component.name != 'Ball' // Handle these exceptions a different way
 		) {
 			if (keyCode === 89) this.scaleBody('y', delta);
 			else if (keyCode === 88) this.scaleBody('x', delta);

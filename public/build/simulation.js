@@ -1,6 +1,6 @@
 /*!
  genetic-creatures v1.0.0 by Matias Vazquez-Levi 
- Build date: 2022-08-30
+ Build date: 2023-07-20
  License: MIT
 */
 class Graph {
@@ -379,26 +379,26 @@ Simulation.loadSims = async function() {
 		return;
 	}
 
-	const data = await Server.http({
-		ip: '127.0.0.1',
-		port: '3000',
-		path: 'getSimulations',
-		method: 'get'
-	});
+	// // Server Arch
+	// const data = await Server.http({
+	// 	ip: '127.0.0.1',
+	// 	port: '3000',
+	// 	path: 'getSimulations',
+	// 	method: 'get'
+	// });
 
+	const data = JSON.parse(localStorage.getItem('savedSimulations'));
 	
-	data.maps.forEach(map => {
-
-		console.log(map);
+	Object.values(data).forEach(map => {
 
 		let mapDiv = document.createElement('div');
 		mapDiv.setAttribute('class', 'element');
-		mapDiv.setAttribute('onClick', `simulation.loadSimulation("${map.name}")`);
+		mapDiv.setAttribute('onClick', `simulation.loadSimulation("${map.meta.name}")`);
 
 		let name = document.createElement('h4');
-		name.innerHTML = map.name;
+		name.innerHTML = map.meta.name;
 		let desc = document.createElement('p');
-		desc.innerHTML = map.description;
+		desc.innerHTML = map.meta.description;
 
 		mapDiv.appendChild(name);
 		mapDiv.appendChild(desc);
@@ -445,6 +445,11 @@ Simulation.prototype.makeObstaclesFrom = function(bodies) {
 			{ isStatic: true }
 		));
 	});
+
+
+	// Add floor
+	obstacles.push(makeGround(this));
+
 	return obstacles;
 }
 
@@ -486,14 +491,16 @@ Simulation.prototype.reloadSimulation = function(config) {
 }
 
 Simulation.prototype.loadSimulation = async function (name) {
-	const data = await Server.http({
-		ip: '127.0.0.1',
-		port: '3000',
-		path: `getSimulation?id=${name}`,
-		method: 'get'
-	});
+	// // Server Arch
+	// const data = await Server.http({
+	// 	ip: '127.0.0.1',
+	// 	port: '3000',
+	// 	path: `getSimulation?id=${name}`,
+	// 	method: 'get'
+	// });
 
-	this.reloadSimulation(data);
+	const data = JSON.parse(localStorage.getItem('savedSimulations'));
+	this.reloadSimulation(data[name]);
 }
 
 
@@ -2602,11 +2609,11 @@ class Creature {
 
 function setup() {
 	simulation = new Simulation({
-		distance: 1000,
-		roundTime: 2000,
-		mutationRate: 1.5,
-		firstPopulation: 128,
-		population: 64
+		distance: 800,
+		roundTime: 3000,
+		mutationRate: 2.5,
+		firstPopulation: 256,
+		population: 128
 	});	
 
 	createCanvas(
