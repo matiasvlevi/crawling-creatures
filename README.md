@@ -2,10 +2,9 @@
 
 Evolve crawling creatures using Matter.js and p5.js
 
-
-* Keep track of the genes with Family names
-* generate a proportion graph of the different genes!
-* Create customized maps for different behavior
+- Keep track of the genes with Family names
+- generate a proportion graph of the different genes!
+- Create customized maps for different behavior
 
 <p align="center">
  <img width="750px" src="https://i.ibb.co/FXTKvzq/crawling-creatures.png">
@@ -35,6 +34,6 @@ npm ci
 npm start
 ```
 
-Check out the [Preview](https://raw.githack.com/matiasvlevi/crawling-creatures/master/public/play/index.html)!
+Check out the [Application](https://matiasvlevi.github.io/crawling-creatures/public/)!
 
 The full experience requires a deployed server, as shown above.
