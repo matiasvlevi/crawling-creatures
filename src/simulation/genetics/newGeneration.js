@@ -1,20 +1,4 @@
 
-Simulation.prototype.uploadGraph = function() {
-	Server.http({
-		ip: '127.0.0.1',
-		port: '3000',
-		method: 'post',
-		path: 'upload',
-		body: {
-			graph: this.graph.toData(),
-			meta: {
-				currentGen: this.currentGen,
-				currentIndex: this.currentIndex
-			}
-		}
-	});
-}
-
 Simulation.prototype.newGeneration = function() {
 	
 	let stats = {...this.baseStats};
@@ -44,8 +28,6 @@ Simulation.prototype.newGeneration = function() {
 	this.distance += 25;
 
     this.graph.update(stats);
-
-    this.uploadGraph();
 
 	return false;
 }
