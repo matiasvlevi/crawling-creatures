@@ -116,11 +116,11 @@ class Editor {
 				name:  name.length !== 0 ? name : 'No Name'
 			},
 			metrics: {
-				firstPopulation: document.querySelector('#firstPopulation').value,
-				population:  document.querySelector('#population').value,
-				distance:  document.querySelector('#distance').value,
-				roundTime:  document.querySelector('#roundTime').value,
-				mutationRate:  document.querySelector('#mutationRate').value
+				firstPopulation: +document.querySelector('#firstPopulation').value,
+				population:  +document.querySelector('#population').value,
+				distance:  +document.querySelector('#distance').value,
+				roundTime:  +document.querySelector('#roundTime').value,
+				mutationRate:  +document.querySelector('#mutationRate').value
 			}
 		}
 	}
