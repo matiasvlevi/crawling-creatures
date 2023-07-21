@@ -477,6 +477,8 @@ Simulation.prototype.reloadSimulation = function(config) {
 	this.baseStats = generation.defaultStats;
 	this.graph = this.initGraph(generation);	
 	
+	console.log(this)
+
 	this.creature = new Creature(
 		this,
 		this.offset + 260,
@@ -673,7 +675,8 @@ Simulation.prototype.newGeneration = function() {
 
     this.graph.update(stats);
 
-    this.uploadGraph();
+	// // Server Arch
+    // this.uploadGraph();
 
 	return false;
 }
